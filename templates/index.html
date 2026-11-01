@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moodify | AI Music Experience</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #0b0c12;
+            color: #f5f5fa;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            padding: 22px 5%;
+            border-bottom: 1px solid #242532;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .brand span {
+            color: #a78bfa;
+        }
+
+        .status {
+            background: #17291f;
+            color: #65e6a2;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .container-main {
+            max-width: 1400px;
+            margin: auto;
+            padding: 35px 4%;
+        }
+
+        .heading {
+            margin-bottom: 30px;
+        }
+
+        .heading h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .heading p {
+            color: #9293a5;
+            font-size: 14px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 25px;
+            align-items: start;
+        }
+
+        .panel {
+            background: #14151f;
+            border: 1px solid #292a38;
+            border-radius: 18px;
+            padding: 22px;
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .panel-heading h2 {
+            font-size: 19px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .live-label {
+            color: #c4b5fd;
+            font-size: 11px;
+            background: #29213d;
+            padding: 7px 11px;
+            border-radius: 20px;
+        }
+
+        .camera-frame {
+            background: #080910;
+            border-radius: 14px;
+            overflow: hidden;
+            min-height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .camera-frame img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .mood-card {
+            margin-top: 20px;
+            background: linear-gradient(120deg, #211b35, #171825);
+            border: 1px solid #40345f;
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mood-label {
+            color: #a5a3b5;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            margin-bottom: 9px;
+        }
+
+        .mood-value {
+            font-size: 25px;
+            font-weight: 800;
+            color: #c4b5fd;
+        }
+
+        .mood-icon {
+            font-size: 38px;
+        }
+
+        .songs-panel {
+            min-height: 500px;
+        }
+
+        .song-list {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+            max-height: 570px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .song-card {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            background: #1c1d29;
+            border: 1px solid #292a38;
+            border-radius: 12px;
+            padding: 13px;
+            transition: 0.2s;
+        }
+
+        .song-card:hover {
+            background: #282337;
+            border-color: #8063c7;
+            transform: translateY(-2px);
+        }
+
+        .song-art {
+            min-width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            background: #302649;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 21px;
+        }
+
+        .song-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .song-name {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            overflow-wrap: anywhere;
+        }
+
+        .song-artist {
+            color: #9293a5;
+            font-size: 11px;
+            overflow-wrap: anywhere;
+        }
+
+        .play-button {
+            text-decoration: none;
+            color: #c4b5fd;
+            background: #302649;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .play-button:hover {
+            color: white;
+            background: #8063c7;
+        }
+
+        .empty-state {
+            color: #9293a5;
+            text-align: center;
+            padding: 35px 10px;
+            font-size: 13px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #666879;
+            font-size: 11px;
+            padding: 30px;
+        }
+
+        @media(max-width: 850px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .heading h1 {
+                font-size: 26px;
+            }
+
+            .songs-panel {
+                min-height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="brand">♫ MOOD<span>IFY</span></div>
+        <div class="status">● AI SYSTEM ONLINE</div>
+    </nav>
+
+    <main class="container-main">
+
+        <div class="heading">
+            <h1>Feel the mood. Find your music.</h1>
+            <p>Your emotions, detected by AI. Music recommendations made for you.</p>
+        </div>
+
+        <div class="dashboard">
+
+            <!-- LEFT SIDE: CAMERA AND MOOD -->
+
+            <section class="panel">
+
+                <div class="panel-heading">
+                    <h2>Live Emotion Detection</h2>
+                    <span class="live-label">● LIVE CAMERA</span>
+                </div>
+
+                <div class="camera-frame">
+                    <img src="{{ url_for('video_feed') }}" alt="Live camera feed">
+                </div>
+
+                <div class="mood-card">
+                    <div>
+                        <div class="mood-label">YOUR CURRENT MOOD</div>
+                        <div class="mood-value" id="currentMood">Detecting...</div>
+                    </div>
+                    <div class="mood-icon" id="moodIcon">🎭</div>
+                </div>
+
+            </section>
+
+            <!-- RIGHT SIDE: SONG RECOMMENDATIONS -->
+
+            <section class="panel songs-panel">
+
+                <div class="panel-heading">
+                    <h2>Recommended Songs</h2>
+                    <span class="live-label">♫ FOR YOU</span>
+                </div>
+
+                <div class="song-list" id="songList">
+                    <div class="empty-state">Loading your recommendations...</div>
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+    <div class="footer">
+        MOODIFY · AI POWERED MUSIC RECOMMENDATION
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+        const moodIcons = {
+            "Happy": "😊",
+            "Sad": "😔",
+            "Angry": "😠",
+            "Fearful": "😨",
+            "Disgusted": "🤢",
+            "Surprised": "😲",
+            "Neutral": "😐"
+        };
+
+        // Load songs from your existing Flask /t endpoint
+        function loadSongs() {
+            $.getJSON('/t', function(data) {
+
+                const songList = document.getElementById('songList');
+                songList.innerHTML = '';
+
+                if (!data || data.length === 0) {
+                    songList.innerHTML =
+                        '<div class="empty-state">No songs available right now.</div>';
+                    return;
+                }
+
+                data.forEach(function(song) {
+
+                    const name = song.Name || 'Unknown Song';
+                    const album = song.Album || 'Unknown Album';
+                    const artist = song.Artist || 'Unknown Artist';
+
+                    const searchText = encodeURIComponent(name + ' ' + artist);
+                    const spotifyUrl = song.Spotify_Link || '#';
+
+                    const card = document.createElement('div');
+                    card.className = 'song-card';
+
+                    const art = document.createElement('div');
+                    art.className = 'song-art';
+                    art.textContent = '♫';
+
+                    const info = document.createElement('div');
+                    info.className = 'song-info';
+
+                    const songName = document.createElement('div');
+                    songName.className = 'song-name';
+                    songName.textContent = name;
+
+                    const songArtist = document.createElement('div');
+                    songArtist.className = 'song-artist';
+                    songArtist.textContent = artist + ' · ' + album;
+
+                    info.appendChild(songName);
+                    info.appendChild(songArtist);
+
+                    const play = document.createElement('a');
+                    play.className = 'play-button';
+                    play.href = spotifyUrl;
+                    play.target = '_blank';
+                    play.rel = 'noopener noreferrer';
+                    play.textContent = '▶';
+                    play.title = 'Search this song on Spotify';
+
+                    card.appendChild(art);
+                    card.appendChild(info);
+                    card.appendChild(play);
+
+                    songList.appendChild(card);
+                });
+
+            });
+        }
+
+        // Update current detected mood
+        function loadMood() {
+            $.getJSON('/mood', function(data) {
+
+                if (data && data.mood) {
+                    document.getElementById('currentMood').textContent =
+                        data.mood;
+
+                    document.getElementById('moodIcon').textContent =
+                        moodIcons[data.mood] || '🎭';
+                }
+
+            });
+        }
+
+        loadSongs();
+        loadMood();
+
+        // Refresh recommendations and mood
+        setInterval(loadSongs, 3000);
+        setInterval(loadMood, 1000);
+    </script>
+
+</body>
+</html>
